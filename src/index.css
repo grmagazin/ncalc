@@ -1,1 +1,335 @@
 @import "tailwindcss";
+
+/* ==========================================================================
+   1. Ribbon "File" Button Border & Styling (First in tabs)
+   ========================================================================== */
+.ribbon-file-btn {
+  background: #107c41 !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 12px !important;
+  padding: 3px 14px !important;
+  border-radius: 5px !important;
+  margin-right: 8px !important;
+  height: 26px !important;
+  border: 1.5px solid #085a2b !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  letter-spacing: -0.01em !important;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  cursor: pointer !important;
+}
+
+.ribbon-file-btn:hover {
+  background: #0b6834 !important;
+  border-color: #043f1d !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) !important;
+  transform: translateY(-0.5px);
+}
+
+.ribbon-file-btn:active {
+  transform: translateY(0.5px);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* ==========================================================================
+   2. Ribbon Tabs Bar & Tabs Background (Fully Theme-Aware for All 12 Themes)
+   ========================================================================== */
+.ribbon-tabs-bar {
+  height: 35px !important;
+  padding-left: 6px !important;
+  background: var(--panel-2, #f8fafc) !important;
+  border-bottom: 1px solid var(--border, #e2e8f0) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 3px !important;
+  transition: background-color 0.15s ease, border-color 0.15s ease !important;
+}
+
+.ribbon-tab-btn {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: var(--muted, #475569) !important;
+  padding: 6px 14px !important;
+  border-radius: 4px 4px 0 0 !important;
+  height: 32px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  transition: all 0.12s ease-in-out !important;
+  border-bottom: 2.5px solid transparent !important;
+  background: transparent !important;
+}
+
+.ribbon-tab-btn:hover {
+  color: var(--text, #0f172a) !important;
+  background: var(--hover, rgba(0, 0, 0, 0.05)) !important;
+}
+
+.ribbon-tab-btn.active {
+  color: var(--accent, #155dfc) !important;
+  background: var(--panel, #ffffff) !important;
+  border-bottom: 2.5px solid var(--accent, #155dfc) !important;
+  font-weight: 700 !important;
+  box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Dark Mode Overrides for Ribbon Tabs Bar & Tabs (Matches all 6 Dark Themes) */
+[data-theme^="dark"] .ribbon-tabs-bar,
+html[data-theme^="dark"] .ribbon-tabs-bar,
+.dark .ribbon-tabs-bar {
+  background: var(--panel-2, #0f172a) !important;
+  border-bottom: 1px solid var(--border, #334155) !important;
+}
+
+[data-theme^="dark"] .ribbon-tab-btn,
+html[data-theme^="dark"] .ribbon-tab-btn,
+.dark .ribbon-tab-btn {
+  color: var(--muted, #94a3b8) !important;
+  background: transparent !important;
+}
+
+[data-theme^="dark"] .ribbon-tab-btn:hover,
+html[data-theme^="dark"] .ribbon-tab-btn:hover,
+.dark .ribbon-tab-btn:hover {
+  color: var(--text, #f1f5f9) !important;
+  background: var(--hover, #1e293b) !important;
+}
+
+[data-theme^="dark"] .ribbon-tab-btn.active,
+html[data-theme^="dark"] .ribbon-tab-btn.active,
+.dark .ribbon-tab-btn.active {
+  color: var(--accent, #38bdf8) !important;
+  background: var(--panel, #1e293b) !important;
+  border-bottom: 2.5px solid var(--accent, #38bdf8) !important;
+  box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* ==========================================================================
+   3. Crisp, Vector Icons Styling (Ribbon & Menus)
+   ========================================================================== */
+.ribbon-icon {
+  font-size: 16px !important;
+  line-height: 1 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  -webkit-font-smoothing: antialiased !important;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.08)) !important;
+  transition: transform 0.12s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.ribbon-icon svg {
+  display: inline-block !important;
+  vertical-align: middle !important;
+  flex-shrink: 0 !important;
+  stroke-width: 2 !important;
+}
+
+.ribbon-tab-btn svg {
+  display: inline-block !important;
+  vertical-align: middle !important;
+  flex-shrink: 0 !important;
+  margin-right: 4px !important;
+  stroke-width: 2 !important;
+}
+
+.ctx-item-icon {
+  width: 20px !important;
+  height: 20px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+}
+
+.ctx-item-icon svg {
+  width: 14px !important;
+  height: 14px !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+  stroke-width: 2 !important;
+}
+
+.menu-entry svg {
+  display: inline-block !important;
+  vertical-align: middle !important;
+  flex-shrink: 0 !important;
+  stroke-width: 2 !important;
+  margin-right: 2px !important;
+}
+
+.ribbon-btn {
+  transition: all 0.12s ease !important;
+  border-radius: 5px !important;
+}
+
+.ribbon-btn:hover {
+  background: var(--hover, rgba(0, 0, 0, 0.05)) !important;
+}
+
+.ribbon-btn:hover .ribbon-icon {
+  transform: scale(1.12) !important;
+}
+
+.ribbon-btn:active .ribbon-icon {
+  transform: scale(0.95) !important;
+}
+
+.ribbon-group-title {
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  color: var(--muted, #94a3b8) !important;
+  margin-top: 2px !important;
+}
+
+/* ==========================================================================
+   4. Footer Sheet Tabs & Toolbar (Fully Theme-Aware for All 12 Themes)
+   ========================================================================== */
+.sheet-tabs {
+  background: var(--panel-2, #f1f5f9) !important;
+  border-top: 1px solid var(--border, #cbd5e1) !important;
+  padding: 3px 8px !important;
+  gap: 4px !important;
+  height: 35px !important;
+  display: flex !important;
+  align-items: center !important;
+  box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.03) !important;
+  transition: background-color 0.15s ease, border-color 0.15s ease !important;
+}
+
+.sheet-tab {
+  background: var(--bg, #e2e8f0) !important;
+  color: var(--muted, #475569) !important;
+  border: 1px solid var(--border, #cbd5e1) !important;
+  border-radius: 4px !important;
+  font-size: 11.5px !important;
+  font-weight: 600 !important;
+  padding: 4px 12px !important;
+  height: 26px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  transition: all 0.12s ease-in-out !important;
+  cursor: pointer !important;
+}
+
+.sheet-tab:hover {
+  background: var(--hover, #f8fafc) !important;
+  color: var(--text, #0f172a) !important;
+  border-color: var(--muted, #94a3b8) !important;
+}
+
+.sheet-tab.active {
+  background: var(--panel, #ffffff) !important;
+  color: var(--accent, #155dfc) !important;
+  font-weight: 700 !important;
+  border: 1px solid var(--border, #94a3b8) !important;
+  border-bottom: 2.5px solid var(--accent, #155dfc) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+}
+
+.sheet-tab .x {
+  opacity: 0.5;
+  font-size: 11px;
+  padding: 0 3px;
+  border-radius: 3px;
+  transition: all 0.1s ease;
+}
+
+.sheet-tab .x:hover {
+  opacity: 1;
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* Dark Mode Overrides for Footer (Matches all 6 Dark Themes) */
+[data-theme^="dark"] .sheet-tabs,
+html[data-theme^="dark"] .sheet-tabs,
+.dark .sheet-tabs {
+  background: var(--panel-2, #0f172a) !important;
+  border-top: 1px solid var(--border, #334155) !important;
+  box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme^="dark"] .sheet-tab,
+html[data-theme^="dark"] .sheet-tab,
+.dark .sheet-tab {
+  background: var(--bg, #0f172a) !important;
+  color: var(--muted, #94a3b8) !important;
+  border: 1px solid var(--border, #334155) !important;
+}
+
+[data-theme^="dark"] .sheet-tab:hover,
+html[data-theme^="dark"] .sheet-tab:hover,
+.dark .sheet-tab:hover {
+  background: var(--hover, #1e293b) !important;
+  color: var(--text, #f1f5f9) !important;
+  border-color: var(--muted, #64748b) !important;
+}
+
+[data-theme^="dark"] .sheet-tab.active,
+html[data-theme^="dark"] .sheet-tab.active,
+.dark .sheet-tab.active {
+  background: var(--panel, #1e293b) !important;
+  color: var(--accent, #38bdf8) !important;
+  font-weight: 700 !important;
+  border: 1px solid var(--border, #334155) !important;
+  border-bottom: 2.5px solid var(--accent, #38bdf8) !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Add sheet button */
+.add-sheet-btn {
+  width: 24px !important;
+  height: 24px !important;
+  border-radius: 4px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-weight: bold !important;
+  color: var(--muted, #64748b) !important;
+  transition: all 0.12s ease !important;
+}
+
+.add-sheet-btn:hover {
+  background: var(--hover, #e2e8f0) !important;
+  color: var(--text, #0f172a) !important;
+}
+
+[data-theme^="dark"] .add-sheet-btn,
+html[data-theme^="dark"] .add-sheet-btn,
+.dark .add-sheet-btn {
+  color: var(--muted, #94a3b8) !important;
+}
+
+[data-theme^="dark"] .add-sheet-btn:hover,
+html[data-theme^="dark"] .add-sheet-btn:hover,
+.dark .add-sheet-btn:hover {
+  background: var(--hover, #1e293b) !important;
+  color: var(--text, #f1f5f9) !important;
+}
+
+/* Status Bar */
+.status-bar {
+  background: var(--panel-2, #f8fafc) !important;
+  border-top: 1px solid var(--border, #e2e8f0) !important;
+  height: 24px !important;
+  font-size: 11px !important;
+  color: var(--muted, #64748b) !important;
+  font-weight: 500 !important;
+  padding: 0 10px !important;
+  transition: background-color 0.15s ease, border-color 0.15s ease !important;
+}
+
+[data-theme^="dark"] .status-bar,
+html[data-theme^="dark"] .status-bar,
+.dark .status-bar {
+  background: var(--panel-2, #0f172a) !important;
+  border-top: 1px solid var(--border, #334155) !important;
+  color: var(--muted, #94a3b8) !important;
+}

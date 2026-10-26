@@ -33,9 +33,49 @@ export default function NcalcHeader({ onToggleAi, isAiOpen }: NcalcHeaderProps) 
   const [searchQuery, setSearchQuery] = useState('');
   const [showCommentsModal, setShowCommentsModal] = useState(false);
   const [isSavedFlash, setIsSavedFlash] = useState(false);
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
 
   const fileMenuRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
+
+  // Monitor theme changes for dark mode header styling
+  useEffect(() => {
+    const checkDark = () => {
+      const themeAttr = document.documentElement.getAttribute('data-theme') || '';
+      const s = (window as any).__NCALC_STORE__?.getState?.();
+      const currentTheme = (s?.theme || themeAttr || '').toLowerCase();
+      const isDark = currentTheme.startsWith('dark') || document.documentElement.classList.contains('dark');
+      setIsDarkTheme(isDark);
+      if (isDark) {
+        if (!document.documentElement.classList.contains('dark')) {
+          document.documentElement.classList.add('dark');
+        }
+      } else {
+        if (document.documentElement.classList.contains('dark')) {
+          document.documentElement.classList.remove('dark');
+        }
+      }
+    };
+
+    checkDark();
+
+    const observer = new MutationObserver(checkDark);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme', 'class', 'style'],
+    });
+
+    const storeObj = (window as any).__NCALC_STORE__;
+    let unsubscribe: any = null;
+    if (storeObj && typeof storeObj.subscribe === 'function') {
+      unsubscribe = storeObj.subscribe(checkDark);
+    }
+
+    return () => {
+      observer.disconnect();
+      if (unsubscribe) unsubscribe();
+    };
+  }, []);
 
   // Close dropdown on click outside
   useEffect(() => {
@@ -160,11 +200,14 @@ export default function NcalcHeader({ onToggleAi, isAiOpen }: NcalcHeaderProps) 
 
   return (
     <header
-      className="fixed top-0 left-0 right-0 h-[44px] z-40 flex items-center justify-between px-3 text-white select-none shadow-md"
+      className="fixed top-0 left-0 right-0 h-[44px] z-40 flex items-center justify-between px-3 text-white select-none shadow-md transition-all duration-200"
       style={{
-        backgroundColor: '#155dfc',
-        backgroundImage: 'linear-gradient(180deg, #1d64fc 0%, #1153e2 100%)',
-        borderBottom: '1px solid rgba(0, 0, 0, 0.15)',
+        backgroundColor: isDarkTheme ? '#080c14' : '#155dfc',
+        backgroundImage: isDarkTheme
+          ? 'linear-gradient(180deg, #0f172a 0%, #080c14 100%)'
+          : 'linear-gradient(180deg, #1d64fc 0%, #1153e2 100%)',
+        borderBottom: isDarkTheme ? '1px solid #1e293b' : '1px solid rgba(0, 0, 0, 0.15)',
+        transition: 'background 0.2s ease, border-color 0.2s ease',
       }}
     >
       {/* LEFT SECTION: Pill Brand, Undo, Redo, Print, Separator, File Title, Save, AutoSave */}
@@ -176,9 +219,9 @@ export default function NcalcHeader({ onToggleAi, isAiOpen }: NcalcHeaderProps) 
           rel="noopener noreferrer"
           className="flex items-center justify-center px-3 py-1 rounded-full text-xs font-bold text-white shadow-xs cursor-pointer hover:brightness-110 active:scale-95 transition-all shrink-0 no-underline"
           style={{
-            backgroundColor: '#0047cc',
-            border: '1.5px solid rgba(255, 255, 255, 0.65)',
-            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.25)',
+            backgroundColor: isDarkTheme ? '#1e293b' : '#0047cc',
+            border: isDarkTheme ? '1.5px solid rgba(255, 255, 255, 0.2)' : '1.5px solid rgba(255, 255, 255, 0.65)',
+            boxShadow: isDarkTheme ? '0 1px 4px rgba(0, 0, 0, 0.6)' : '0 1px 3px rgba(0, 0, 0, 0.25)',
           }}
           title="Ncalc v5.5 — Visit GRmagazin (opens in new tab)"
         >
@@ -216,7 +259,7 @@ export default function NcalcHeader({ onToggleAi, isAiOpen }: NcalcHeaderProps) 
         </button>
 
         {/* Thin Divider */}
-        <div className="h-5 w-px bg-white/25 mx-1" />
+        <div className={`h-5 w-px mx-1 ${isDarkTheme ? 'bg-slate-700' : 'bg-white/25'}`} />
 
         {/* Workbook Title Dropdown (e.g. Untitled 2 .jsom ⌵) */}
         <div className="relative" ref={fileMenuRef}>
@@ -233,16 +276,19 @@ export default function NcalcHeader({ onToggleAi, isAiOpen }: NcalcHeaderProps) 
           {/* Dropdown Menu */}
           {showFileMenu && (
             <div
-              className="absolute left-0 top-full mt-1.5 w-60 bg-white rounded-lg shadow-xl border border-gray-200 text-gray-800 py-1.5 z-50 text-xs animate-in fade-in-50 duration-100"
-              style={{ color: '#1f2937' }}
+              className={`absolute left-0 top-full mt-1.5 w-60 rounded-lg shadow-xl border text-xs py-1.5 z-50 animate-in fade-in-50 duration-100 ${
+                isDarkTheme ? 'bg-[#1e293b] border-slate-700 text-slate-100' : 'bg-white border-gray-200 text-gray-800'
+              }`}
             >
-              <div className="px-3 py-1.5 border-b border-gray-100">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">
+              <div className={`px-3 py-1.5 border-b ${isDarkTheme ? 'border-slate-700' : 'border-gray-100'}`}>
+                <label className={`text-[10px] font-bold uppercase tracking-wider block mb-1 ${isDarkTheme ? 'text-slate-400' : 'text-gray-400'}`}>
                   Document Name
                 </label>
                 <input
                   type="text"
-                  className="w-full px-2 py-1 border border-gray-300 rounded text-xs font-semibold focus:outline-none focus:border-blue-500"
+                  className={`w-full px-2 py-1 border rounded text-xs font-semibold focus:outline-none focus:border-blue-500 ${
+                    isDarkTheme ? 'bg-slate-900 border-slate-600 text-white' : 'bg-white border-gray-300 text-gray-800'
+                  }`}
                   value={docName}
                   onChange={(e) => setDocName(e.target.value)}
                   autoFocus
@@ -251,7 +297,9 @@ export default function NcalcHeader({ onToggleAi, isAiOpen }: NcalcHeaderProps) 
 
               <button
                 type="button"
-                className="w-full px-3 py-1.5 text-left hover:bg-blue-50 flex items-center gap-2 transition-colors cursor-pointer"
+                className={`w-full px-3 py-1.5 text-left flex items-center gap-2 transition-colors cursor-pointer ${
+                  isDarkTheme ? 'hover:bg-slate-700/70 text-slate-200' : 'hover:bg-blue-50 text-gray-800'
+                }`}
                 onClick={() => {
                   const s = getStore();
                   s?.newDoc?.();
@@ -259,27 +307,31 @@ export default function NcalcHeader({ onToggleAi, isAiOpen }: NcalcHeaderProps) 
                   setShowFileMenu(false);
                 }}
               >
-                <FileSpreadsheet className="w-4 h-4 text-blue-600" />
+                <FileSpreadsheet className="w-4 h-4 text-blue-400" />
                 <span>New Blank Workbook</span>
               </button>
 
               <button
                 type="button"
-                className="w-full px-3 py-1.5 text-left hover:bg-blue-50 flex items-center gap-2 transition-colors cursor-pointer"
+                className={`w-full px-3 py-1.5 text-left flex items-center gap-2 transition-colors cursor-pointer ${
+                  isDarkTheme ? 'hover:bg-slate-700/70 text-slate-200' : 'hover:bg-blue-50 text-gray-800'
+                }`}
                 onClick={() => {
                   handleSave();
                   setShowFileMenu(false);
                 }}
               >
-                <Save className="w-4 h-4 text-emerald-600" />
+                <Save className="w-4 h-4 text-emerald-400" />
                 <span>Save to Local DB</span>
               </button>
 
-              <div className="h-px bg-gray-100 my-1" />
+              <div className={`h-px my-1 ${isDarkTheme ? 'bg-slate-700' : 'bg-gray-100'}`} />
 
               <button
                 type="button"
-                className="w-full px-3 py-1.5 text-left hover:bg-blue-50 flex items-center gap-2 transition-colors cursor-pointer"
+                className={`w-full px-3 py-1.5 text-left flex items-center gap-2 transition-colors cursor-pointer ${
+                  isDarkTheme ? 'hover:bg-slate-700/70 text-slate-200' : 'hover:bg-blue-50 text-gray-800'
+                }`}
                 onClick={() => {
                   const s = getStore();
                   const json = JSON.stringify({ sheets: s?.sheets, charts: s?.charts }, null, 2);
@@ -294,7 +346,7 @@ export default function NcalcHeader({ onToggleAi, isAiOpen }: NcalcHeaderProps) 
                   setShowFileMenu(false);
                 }}
               >
-                <Download className="w-4 h-4 text-purple-600" />
+                <Download className="w-4 h-4 text-purple-400" />
                 <span>Export as JSON</span>
               </button>
             </div>
@@ -313,7 +365,9 @@ export default function NcalcHeader({ onToggleAi, isAiOpen }: NcalcHeaderProps) 
           </button>
           {/* Orange/Gold status dot matching Foto 1 */}
           <span
-            className="absolute bottom-1 right-1 w-2 h-2 rounded-full border border-blue-700 pointer-events-none"
+            className={`absolute bottom-1 right-1 w-2 h-2 rounded-full border pointer-events-none ${
+              isDarkTheme ? 'border-slate-800' : 'border-blue-700'
+            }`}
             style={{ backgroundColor: '#f59e0b' }}
             title="Database Sync Active"
           />
@@ -321,10 +375,10 @@ export default function NcalcHeader({ onToggleAi, isAiOpen }: NcalcHeaderProps) 
 
         {/* AutoSave Capsule Toggle: [AutoSave (●) Local DB] */}
         <div
-          className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold text-white/95 shrink-0 cursor-pointer select-none"
+          className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold text-white/95 shrink-0 cursor-pointer select-none transition-all"
           style={{
-            backgroundColor: '#0c2e78',
-            border: '1px solid rgba(255, 255, 255, 0.25)',
+            backgroundColor: isDarkTheme ? '#111827' : '#0c2e78',
+            border: isDarkTheme ? '1px solid #374151' : '1px solid rgba(255, 255, 255, 0.25)',
           }}
           onClick={() => {
             setAutoSaveEnabled(!autoSaveEnabled);
@@ -337,12 +391,16 @@ export default function NcalcHeader({ onToggleAi, isAiOpen }: NcalcHeaderProps) 
           {/* Toggle Switch */}
           <div
             className={`w-7 h-3.5 rounded-full p-0.5 flex items-center transition-colors ${
-              autoSaveEnabled ? 'bg-blue-400 justify-end' : 'bg-gray-500 justify-start'
+              autoSaveEnabled
+                ? (isDarkTheme ? 'bg-sky-500 justify-end' : 'bg-blue-400 justify-end')
+                : 'bg-gray-500 justify-start'
             }`}
           >
             <div className="w-2.5 h-2.5 rounded-full bg-white shadow-xs" />
           </div>
-          <span className="text-[10.5px] text-blue-200">Local DB</span>
+          <span className="text-[10.5px]" style={{ color: isDarkTheme ? '#94a3b8' : '#bfdbfe' }}>
+            Local DB
+          </span>
         </div>
       </div>
 
@@ -354,23 +412,28 @@ export default function NcalcHeader({ onToggleAi, isAiOpen }: NcalcHeaderProps) 
         <div
           className="w-full flex items-center rounded-md px-2.5 py-1 text-xs transition-all"
           style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.16)',
-            border: '1px solid rgba(255, 255, 255, 0.28)',
+            backgroundColor: isDarkTheme ? 'rgba(15, 23, 42, 0.75)' : 'rgba(255, 255, 255, 0.16)',
+            border: isDarkTheme ? '1px solid #334155' : '1px solid rgba(255, 255, 255, 0.28)',
             color: '#ffffff',
           }}
         >
-          <Search className="w-3.5 h-3.5 text-blue-200 mr-2 shrink-0" />
+          <Search className={`w-3.5 h-3.5 mr-2 shrink-0 ${isDarkTheme ? 'text-sky-400' : 'text-blue-200'}`} />
           <input
             ref={searchInputRef}
             type="text"
-            className="w-full bg-transparent border-none outline-none text-white text-xs placeholder:text-blue-100/70"
+            className={`w-full bg-transparent border-none outline-none text-white text-xs ${
+              isDarkTheme ? 'placeholder:text-slate-400' : 'placeholder:text-blue-100/70'
+            }`}
             placeholder="Tell me what you want to do (Alt+Q)..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
           <span
-            className="text-[10px] text-blue-200/90 font-mono font-medium ml-1.5 shrink-0 px-1 py-0.2 rounded"
-            style={{ backgroundColor: 'rgba(0, 0, 0, 0.15)' }}
+            className={`text-[10px] font-mono font-medium ml-1.5 shrink-0 px-1 py-0.2 rounded ${
+              isDarkTheme
+                ? 'text-slate-300 bg-slate-800 border border-slate-700'
+                : 'text-blue-200/90 bg-black/15'
+            }`}
           >
             Alt+Q
           </span>
@@ -382,13 +445,15 @@ export default function NcalcHeader({ onToggleAi, isAiOpen }: NcalcHeaderProps) 
         {/* Themes Button */}
         <button
           type="button"
-          className="flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold text-white transition-all cursor-pointer hover:bg-white/20 active:scale-95"
+          className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold text-white transition-all cursor-pointer active:scale-95 ${
+            isDarkTheme ? 'hover:bg-slate-700/70' : 'hover:bg-white/20'
+          }`}
           style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.18)',
-            border: '1px solid rgba(255, 255, 255, 0.3)',
+            backgroundColor: isDarkTheme ? 'rgba(30, 41, 59, 0.75)' : 'rgba(255, 255, 255, 0.18)',
+            border: isDarkTheme ? '1px solid #475569' : '1px solid rgba(255, 255, 255, 0.3)',
           }}
           onClick={handleOpenThemesModal}
-          title="Themes Palette & Styling"
+          title="Themes Palette & Styling (12 Themes)"
         >
           <LayoutGrid className="w-3.5 h-3.5" />
           <span>Themes</span>
@@ -444,22 +509,23 @@ export default function NcalcHeader({ onToggleAi, isAiOpen }: NcalcHeaderProps) 
           {/* Quick Notification Popover */}
           {showCommentsModal && (
             <div
-              className="absolute right-0 top-full mt-1.5 w-64 bg-white rounded-lg shadow-xl border border-gray-200 text-gray-800 p-3 z-50 text-xs animate-in fade-in duration-100"
-              style={{ color: '#1f2937' }}
+              className={`absolute right-0 top-full mt-1.5 w-64 rounded-lg shadow-xl border p-3 z-50 text-xs animate-in fade-in duration-100 ${
+                isDarkTheme ? 'bg-[#1e293b] border-slate-700 text-slate-100' : 'bg-white border-gray-200 text-gray-800'
+              }`}
             >
-              <div className="font-bold text-xs flex items-center justify-between border-b pb-1.5 mb-2">
+              <div className={`font-bold text-xs flex items-center justify-between border-b pb-1.5 mb-2 ${isDarkTheme ? 'border-slate-700' : 'border-gray-200'}`}>
                 <span>Spreadsheet Status</span>
-                <span className="text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-mono">
+                <span className={`text-[10px] px-1.5 py-0.5 rounded font-mono ${isDarkTheme ? 'bg-emerald-950 text-emerald-300 border border-emerald-800' : 'bg-emerald-100 text-emerald-800'}`}>
                   Healthy
                 </span>
               </div>
-              <p className="text-[11.5px] text-gray-600 leading-snug">
+              <p className={`text-[11.5px] leading-snug ${isDarkTheme ? 'text-slate-300' : 'text-gray-600'}`}>
                 Ncalc v5.5 engine running with 0 circular dependencies. AI Copilot is connected and ready.
               </p>
-              <div className="mt-2.5 pt-2 border-t flex justify-end">
+              <div className={`mt-2.5 pt-2 border-t flex justify-end ${isDarkTheme ? 'border-slate-700' : 'border-gray-200'}`}>
                 <button
                   type="button"
-                  className="px-2.5 py-1 bg-blue-600 text-white font-semibold rounded text-[11px] hover:bg-blue-700"
+                  className="px-2.5 py-1 bg-blue-600 text-white font-semibold rounded text-[11px] hover:bg-blue-700 cursor-pointer"
                   onClick={() => setShowCommentsModal(false)}
                 >
                   Dismiss

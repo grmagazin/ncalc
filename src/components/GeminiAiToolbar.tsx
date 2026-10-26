@@ -14,10 +14,14 @@ import {
   Check,
   Table,
   BarChart3,
+  BarChart2,
   Trash2,
   Wand2,
   Info,
   ChevronRight,
+  Zap,
+  Eraser,
+  Scissors,
 } from 'lucide-react';
 
 interface GeminiAiToolbarProps {
@@ -606,10 +610,14 @@ export default function GeminiAiToolbar({ isOpen, onClose }: GeminiAiToolbarProp
         boxShadow: '-4px 0 25px rgba(0, 0, 0, 0.12)',
       }}
     >
-      {/* 1. TOP HEADER (Deep Forest Green matching Foto 2) */}
+      {/* 1. TOP HEADER (Royal Blue matching Foto 1 header) */}
       <div
-        className="px-3.5 py-2.5 flex items-center justify-between text-white shrink-0"
-        style={{ backgroundColor: '#14532d' }}
+        className="px-3.5 py-2.5 flex items-center justify-between text-white shrink-0 shadow-xs"
+        style={{
+          backgroundColor: '#155dfc',
+          backgroundImage: 'linear-gradient(180deg, #1d64fc 0%, #1153e2 100%)',
+          borderBottom: '1px solid rgba(0, 0, 0, 0.15)',
+        }}
       >
         {/* Title with spreadsheet icon */}
         <div className="flex items-center gap-2">
@@ -618,7 +626,7 @@ export default function GeminiAiToolbar({ isOpen, onClose }: GeminiAiToolbarProp
           </div>
           <div className="text-sm font-bold flex items-center gap-1.5 tracking-tight">
             <span className="text-white font-extrabold">AI Ncalc</span>
-            <span style={{ color: '#6ee7b7' }}>Assistant</span>
+            <span style={{ color: '#93c5fd' }}>Assistant</span>
           </div>
         </div>
 
@@ -626,7 +634,7 @@ export default function GeminiAiToolbar({ isOpen, onClose }: GeminiAiToolbarProp
         <div className="flex items-center gap-3">
           <button
             type="button"
-            className="text-[11px] font-semibold text-emerald-200 hover:text-white flex items-center gap-1 transition-colors cursor-pointer"
+            className="text-[11px] font-semibold text-blue-200 hover:text-white flex items-center gap-1 transition-colors cursor-pointer"
             onClick={() => setShowKeyModal(true)}
             title="Configure Gemini API Key"
           >
@@ -636,7 +644,7 @@ export default function GeminiAiToolbar({ isOpen, onClose }: GeminiAiToolbarProp
 
           <button
             type="button"
-            className="text-xs font-semibold text-emerald-100 hover:text-white transition-colors cursor-pointer"
+            className="text-xs font-semibold text-blue-100 hover:text-white transition-colors cursor-pointer"
             onClick={handleReset}
           >
             Reset
@@ -654,14 +662,14 @@ export default function GeminiAiToolbar({ isOpen, onClose }: GeminiAiToolbarProp
       </div>
 
       {/* 2. TAB NAVIGATION BAR (Chat & Edit vs Data Pipeline •) */}
-      <div className="bg-[#f0f4f0] px-3 pt-2 pb-1.5 flex items-center justify-between border-b border-gray-200 shrink-0">
+      <div className="bg-[#f0f4f8] px-3 pt-2 pb-1.5 flex items-center justify-between border-b border-gray-200 shrink-0">
         <div className="flex items-center gap-2 w-full">
           {/* Chat & Edit Tab (Active Pill) */}
           <button
             type="button"
             className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               activeTab === 'chat'
-                ? 'bg-[#1a1a1a] text-[#4ade80] shadow-xs'
+                ? 'bg-[#0f172a] text-[#60a5fa] shadow-xs'
                 : 'bg-transparent text-gray-600 hover:text-gray-900'
             }`}
             onClick={() => setActiveTab('chat')}
@@ -674,13 +682,13 @@ export default function GeminiAiToolbar({ isOpen, onClose }: GeminiAiToolbarProp
             type="button"
             className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
               activeTab === 'pipeline'
-                ? 'bg-[#1a1a1a] text-[#4ade80] shadow-xs'
+                ? 'bg-[#0f172a] text-[#60a5fa] shadow-xs'
                 : 'bg-transparent text-gray-600 hover:text-gray-900'
             }`}
             onClick={() => setActiveTab('pipeline')}
           >
             <span>Data Pipeline</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
           </button>
         </div>
       </div>
@@ -865,10 +873,10 @@ export default function GeminiAiToolbar({ isOpen, onClose }: GeminiAiToolbarProp
             {stats.numericCount > 0 && (
               <button
                 type="button"
-                className="px-2.5 py-1 rounded-lg font-bold shrink-0 bg-white border border-gray-200 hover:border-emerald-500 hover:bg-emerald-50 hover:text-emerald-800 transition-all cursor-pointer shadow-2xs flex items-center gap-1 active:scale-95 text-[11px]"
+                className="px-2.5 py-1 rounded-lg font-bold shrink-0 bg-white border border-gray-200 hover:border-emerald-500 hover:bg-emerald-50 hover:text-emerald-800 transition-all cursor-pointer shadow-2xs flex items-center gap-1.5 active:scale-95 text-[11px]"
                 onClick={() => handleWriteFormula(true)}
               >
-                <span>⚡</span>
+                <Zap className="w-3.5 h-3.5 text-amber-500 fill-amber-400" />
                 <span>AutoSum</span>
               </button>
             )}
@@ -876,38 +884,38 @@ export default function GeminiAiToolbar({ isOpen, onClose }: GeminiAiToolbarProp
             {stats.numericCount > 0 && (
               <button
                 type="button"
-                className="px-2.5 py-1 rounded-lg font-bold shrink-0 bg-white border border-gray-200 hover:border-purple-500 hover:bg-purple-50 hover:text-purple-800 transition-all cursor-pointer shadow-2xs flex items-center gap-1 active:scale-95 text-[11px]"
+                className="px-2.5 py-1 rounded-lg font-bold shrink-0 bg-white border border-gray-200 hover:border-purple-500 hover:bg-purple-50 hover:text-purple-800 transition-all cursor-pointer shadow-2xs flex items-center gap-1.5 active:scale-95 text-[11px]"
                 onClick={() => handleMakeChart(true)}
               >
-                <span>📊</span>
+                <BarChart2 className="w-3.5 h-3.5 text-purple-600" />
                 <span>Trend Chart</span>
               </button>
             )}
 
             <button
               type="button"
-              className="px-2.5 py-1 rounded-lg font-bold shrink-0 bg-white border border-gray-200 hover:border-emerald-500 hover:bg-emerald-50 hover:text-emerald-800 transition-all cursor-pointer shadow-2xs flex items-center gap-1 active:scale-95 text-[11px]"
+              className="px-2.5 py-1 rounded-lg font-bold shrink-0 bg-white border border-gray-200 hover:border-emerald-500 hover:bg-emerald-50 hover:text-emerald-800 transition-all cursor-pointer shadow-2xs flex items-center gap-1.5 active:scale-95 text-[11px]"
               onClick={() => handleCleanData(true)}
             >
-              <span>🧹</span>
+              <Eraser className="w-3.5 h-3.5 text-emerald-600" />
               <span>Clean Spaces</span>
             </button>
 
             <button
               type="button"
-              className="px-2.5 py-1 rounded-lg font-bold shrink-0 bg-white border border-gray-200 hover:border-blue-500 hover:bg-blue-50 hover:text-blue-800 transition-all cursor-pointer shadow-2xs flex items-center gap-1 active:scale-95 text-[11px]"
+              className="px-2.5 py-1 rounded-lg font-bold shrink-0 bg-white border border-gray-200 hover:border-blue-500 hover:bg-blue-50 hover:text-blue-800 transition-all cursor-pointer shadow-2xs flex items-center gap-1.5 active:scale-95 text-[11px]"
               onClick={handleBuildPivot}
             >
-              <span>🔄</span>
+              <Table className="w-3.5 h-3.5 text-blue-600" />
               <span>Pivot View</span>
             </button>
 
             <button
               type="button"
-              className="px-2.5 py-1 rounded-lg font-bold shrink-0 bg-white border border-gray-200 hover:border-rose-500 hover:bg-rose-50 hover:text-rose-800 transition-all cursor-pointer shadow-2xs flex items-center gap-1 active:scale-95 text-[11px]"
+              className="px-2.5 py-1 rounded-lg font-bold shrink-0 bg-white border border-gray-200 hover:border-rose-500 hover:bg-rose-50 hover:text-rose-800 transition-all cursor-pointer shadow-2xs flex items-center gap-1.5 active:scale-95 text-[11px]"
               onClick={handleRemoveDupes}
             >
-              <span>✂️</span>
+              <Scissors className="w-3.5 h-3.5 text-rose-600" />
               <span>Remove Dupes</span>
             </button>
           </div>
@@ -1076,7 +1084,7 @@ export default function GeminiAiToolbar({ isOpen, onClose }: GeminiAiToolbarProp
             title="Execute 4-step smart data pipeline"
           >
             <span>Run Pipeline</span>
-            <span className="text-[10px]">▶</span>
+            <Play className="w-3 h-3 fill-current ml-1" />
           </button>
         </div>
 
@@ -1147,12 +1155,12 @@ export default function GeminiAiToolbar({ isOpen, onClose }: GeminiAiToolbarProp
           />
         </div>
 
-        {/* Circular Send Button in Dark Green matching Foto 2 */}
+        {/* Circular Send Button in Royal Blue matching Header */}
         <button
           type="submit"
           disabled={!inputPrompt.trim() || isSubmitting}
-          className="w-9 h-9 rounded-xl flex items-center justify-center text-white transition-all cursor-pointer shadow-md active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed"
-          style={{ backgroundColor: '#14532d' }}
+          className="w-9 h-9 rounded-xl flex items-center justify-center text-white transition-all cursor-pointer shadow-md active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed hover:brightness-110"
+          style={{ backgroundColor: '#155dfc' }}
           title="Send message to AI"
         >
           {isSubmitting ? (
@@ -1231,7 +1239,7 @@ export default function GeminiAiToolbar({ isOpen, onClose }: GeminiAiToolbarProp
               <button
                 type="button"
                 disabled={isTestingKey}
-                className="px-4 py-1.5 rounded-lg bg-emerald-700 text-white text-xs font-bold hover:bg-emerald-800 flex items-center gap-1.5 shadow-xs"
+                className="px-4 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-xs transition-colors cursor-pointer"
                 onClick={handleSaveKey}
               >
                 {isTestingKey && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
