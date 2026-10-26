@@ -1,0 +1,8 @@
+{
+  "name": "ncalc",
+  "description": "GRmagazin Sheets Ncalc v3 - Fast, stable, and simple spreadsheet web application with Excel ribbon tabs, calculation engine, interactive ECharts visualizers, and offline persistence.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
